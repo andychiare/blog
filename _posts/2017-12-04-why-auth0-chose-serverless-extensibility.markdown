@@ -1,6 +1,6 @@
 ---
 layout: post_extend
-title: "The Path to Serverless Extensibility at Auth0"
+title: "Why Auth0 chose Serverless Extensibility"
 description: ""
 date: 2017-12-04 10:19
 category: Extend, Business
@@ -11,7 +11,7 @@ author:
   avatar: "https://cdn.auth0.com/website/blog/profiles/bobbyjohnson.png"
 design:
   bg_color: "#3445DC"
-  image: https://cdn.auth0.com/website/blog/extend/securing-webtasks-part-1-shared-secret-authorization/webtasks.png
+  image: https://cdn.auth0.com/website/blog/extend/why-auth0-chose-serverless-extensibility/logo.png
 tags:
   - extend
   - serverless
