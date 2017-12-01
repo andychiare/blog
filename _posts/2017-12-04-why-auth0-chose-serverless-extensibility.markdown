@@ -60,6 +60,9 @@ The earliest MVP of this concept used [node sandbox](https://www.npmjs.com/packa
 
 This implementation had some issues, primarily a lack of security. It was merely creating a process boundary between the core Auth0 stack and the customer's code. Node sandbox was primarily preventing well behaved, well-intentioned code from accidentally bringing down the authorization service or other sandboxed code.
 
+> **"It was a very expensive operation to run because each rule would spin up a new process."**<br />
+> Sandrino Di Mattia - Engineering Lead
+
 However, the MVP proved that the customer experience aligned well with our philosophy of "Identity made simple for developers."
 
 ## How do you secure execution of untrusted code?
@@ -137,8 +140,8 @@ Compared to the node sandbox model which was like CGI creating a new process for
 
 The next functional change in Webtasks was a move from a pure sandbox model to a pre-provisioned model. We created a set of management APIs that allowed the creation of a webtask that could then be invoked separately.
 
-> **"Imagine our biggest customers having thousands of logins per second. Performancewise instead of having to send up to 100kb of code, directly sending the request to a webtask and get a response back dramatically increased throughput."**<br />
-> Sandrino di Mattia - Engineering Lead
+> **"Imagine our biggest customers having thousands of logins per second. Performancewise instead of having to send up to 100kb of code, directly sending the request to a webtask and getting a response back dramatically increased throughput."**<br />
+> Sandrino Di Mattia - Engineering Lead
 
 This change was a more traditional model bringing it conceptually in line with other FaaS providers like Lamda. Pre-provisioning had an advantage in allowing the system to optimize compilation of the code once and execute over and over. It also freed up the body of the request sent to the webtask making it much more useful for a large number of scenarios.
 
@@ -169,13 +172,17 @@ Multi-Factor Authentication came about this way. MFA was not a switch on the das
 For more examples, take a look at our [rules repository](https://github.com/auth0/rules) on Github. Every single one comes from a real-world customer use case.
 
 > **"Every event in the life cycle of the user can be expressed through code and in that way we can support any backend out there in a flash. No matter how customers encrypt or hash passwords; whatever they do is supported because they can provide the details using custom code."**<br />
-> Sandrino di Mattia - Engineering Lead
+> Sandrino Di Mattia - Engineering Lead
 
 ## Summary
 
-Serverless Extensibility is a logical extension to Webhooks. We have created a product call [Auth0 Extend](https://auth0.com/extend/) based on the pattern that allows other SaaS companies to offer it from their products quickly.
+Serverless Extensibility is a logical extension to Webhooks. It has taken us four years of experimentation and refinement, and the resulting Webtask platform is a success that empowers our field engineers to close deals, simplifies our core architecture and delights our customers.
+
+We have created a product call [Auth0 Extend](https://auth0.com/extend/) based on the pattern that allows other SaaS companies to offer it from their products quickly.
 
 When [Jeff Lindsay](https://twitter.com/progrium) was introduced to Extend he certainly felt we were on to something. Jeff was the person who coined the phrase [Webhook](http://progrium.com/blog/2007/05/03/web-hooks-to-revolutionize-the-web/), which has become ubiquitous on the web as a way to offer extension points from applications online.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">This was the whole point of pushing webhooks in 2007. Literally built this as a prototype. <a href="https://t.co/Wyoz0qXO9P">https://t.co/Wyoz0qXO9P</a></p>&mdash; Jeff Lindsay (@progrium) <a href="https://twitter.com/progrium/status/864588610858881029?ref_src=twsrc%5Etfw">May 16, 2017</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+If you are interested in giving it a [try](https://auth0.com/extend/try?umt_source=extend_blog&umt_medium=utility-bar-try&umt_campaign=extend_blog), you can start today for free. Feel free to [contact us](https://auth0.com/extend/#support) if you have any questions.
