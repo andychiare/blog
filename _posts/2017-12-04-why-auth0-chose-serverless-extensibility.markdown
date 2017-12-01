@@ -24,14 +24,7 @@ related:
 ---
 Previously, we wrote about the emerging pattern of [Serverless Extensibility](https://auth0.com/blog/why-is-serverless-extensibility-better-than-webhooks/). Examples of the concept are popping up in many of the services you use daily like [Twilio](https://www.twilio.com/functions), [Stamplay](https://stamplay.com/) and here at [Auth0](https://auth0.com/).
 
-Serverless Extensibility is a logical extension to Webhooks. We have created a product call [Auth0 Extend](https://auth0.com/extend/) based on the pattern that allows other SaaS companies to offer it from their products quickly.
-
-When [Jeff Lindsay](https://twitter.com/progrium) was introduced to Extend he certainly felt we were on to something. Jeff was the person who coined the phrase [Webhook](http://progrium.com/blog/2007/05/03/web-hooks-to-revolutionize-the-web/), which has become ubiquitous on the web as a way to offer extension points from applications online.
-
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">This was the whole point of pushing webhooks in 2007. Literally built this as a prototype. <a href="https://t.co/Wyoz0qXO9P">https://t.co/Wyoz0qXO9P</a></p>&mdash; Jeff Lindsay (@progrium) <a href="https://twitter.com/progrium/status/864588610858881029?ref_src=twsrc%5Etfw">May 16, 2017</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-However, how did Auth0 get to the point of offering Auth0 Extend as a product? It has been a four-year journey that predates both [Amazon Lambda](https://aws.amazon.com/lambda/) and the term Serverless. Like all innovation, it starts with resource constraints, the need to give customers the features they wanted and making sales.
+How did Auth0 get to the point of offering extensibility through a serverless platform? It has been a four-year journey that predates both [Amazon Lambda](https://aws.amazon.com/lambda/) and the term Serverless. Like all innovation, it starts with resource constraints, the need to give customers the features they wanted and making sales.
 
 ## The Problem We Were Trying to Solve
 
@@ -79,9 +72,9 @@ The first prototype of the Webtask architecture was an interview exercise. Exten
 
 The stabilization effort was something entirely different. You cannot solve a stabilization problem by adding people to the team.
 
-## Iterating on the Webtask Stack
+## Evolving the Webtask Stack
 
-### Iteration 1: Creating the platform
+### Creating the platform
 
 The first version of Webtask used early versions of [Core OS](https://coreos.com). Core OS at the time used three distinct technologies to provide a platform for creating distributed systems:
 
@@ -97,7 +90,7 @@ Becuase this architecture depended on distributed configuration management it ha
 
 Once in production, we realized we were relying on the cutting edge of three technologies. We had instances of the platform destabilizing at 2:00 AM in the morning in Austraila one too many times. It felt like a constant game of whack-a-mole, chasing one stability issue after another. When we upgraded the stack to new versions of Docker, etcd or Fleet; some new issue would pop up.
 
-### Iteration 2: Stabilizing the platform
+### Stabilizing the platform
 
 The focus of version two of Webtask was to simplify the architecture and remove every anything that was not absolutely needed to increase the fault tolerance of the overall system.
 
@@ -109,7 +102,7 @@ When a request comes in, the load balancer decides to send it to a particular vi
 
 At this point the only component of Core OS still in use was Docker. So, we dropped down to vanilla Ubuntu. The process of simplification was a metamorphosis of the sack that resulted in considerable improvements in stability.
 
-### Iteration 3: Stabilizing real-time logging
+### Stabilizing real-time logging
 
 The third version of the Webtask stack focused on real-time logs. To this day it is the only feature in the Webtasks architecture that requires virtual machines to be aware of each other's existence.
 
@@ -123,9 +116,9 @@ We started looking for alternatives and landed on [ZeroMQ](http://zeromq.org/). 
 
 Switching to ZeroMQ was the single most stabilizing change we made in the history of the Webtask cluster. It was such an impressive improvement Tomasz wrote a [post about it](https://tomasz.janczuk.org/2015/09/from-kafka-to-zeromq-for-log-aggregation.html). That post received 10,000 views the first day it published. Others were apparently having similar issues.
 
-## Iterating on Webtask Features
+## Evolving Webtask Features
 
-### Iteration 1: Feature parity with node sandbox
+### Feature parity with node sandbox
 
 The first version of Webtasks functionality started as a better equivalent of node sandbox. The execution of custom code took only one HTTP request. The body of that request contained the code to execute.
 
@@ -133,13 +126,13 @@ When a new authorization request comes in the code authored by the customer is b
 
 Compared to the node sandbox model which was like CGI creating a new process for every request. This version of Webtasks and the way it was used was like FastCGI. We are still sending the code to execute every request, but the process persisted across many requests. This enhancement saved considerable time recreating the process.
 
-### Iteration 2: Moving to pre-provisioning
+### Moving to pre-provisioning
 
 The next functional change in Webtasks was a move from a pure sandbox model to a pre-provisioned model. We created a set of management APIs that allowed the creation of a Webtask that could then be invoked separately.
 
 This change was a more traditional model bringing it conceptually in line with other FaaS providers like Lamda. Pre-provisioning had an advantage in allowing the system to optimize compilation of the code once and execute over and over. It also freed up the body of the request sent to the webtask making it much more useful for a large number of scenarios.
 
-### Iteration 3: Focus on startup latency
+### Focus on startup latency
 
 Auth0 is in a unique position from other FaaS providers in that our code executes in the UI path. With each execution, a user is sitting at a login dialog and watching a spinner spin. This time is when we have to execute all webtasks.
 
@@ -151,7 +144,7 @@ A choice was made to keep a prewarmed pool of containers that are immediately re
 
 There is some overhead in making the assignment compared to a warm request, but it is considerably less than spinning up a new container. It is probably the most distinctive aspect of our platform, and to this day no other serverless provider matches our startup latency.
 
-## Summary
+## The impact on our sales engineers and customers
 
 Adding extensibility to the product allowed field engineers to say "yes" very often and show those customers a way to accomplish their goals. It opened up a  window of customization where field engineers could work independently from core engineering. They could deliver customizations very quickly without waiting weeks or even days.
 
@@ -161,3 +154,12 @@ Adding extensibility to the product allowed field engineers to say "yes" very of
 Putting extensibility into the hands of customers also gives us great insights into where the market is going. If we see an extension being implemented again and again through the use of custom code, that is a validation of that feature and an opportunity to add in the core product.
 
 Multi-Factor Authentication came about this way. MFA was not a switch on the dashboard initially. It was merely a rule you applied to your account. Over time, our customers' usage of this rule indicated MFA was an important feature to have in the core product.
+
+## Summary
+
+Serverless Extensibility is a logical extension to Webhooks. We have created a product call [Auth0 Extend](https://auth0.com/extend/) based on the pattern that allows other SaaS companies to offer it from their products quickly.
+
+When [Jeff Lindsay](https://twitter.com/progrium) was introduced to Extend he certainly felt we were on to something. Jeff was the person who coined the phrase [Webhook](http://progrium.com/blog/2007/05/03/web-hooks-to-revolutionize-the-web/), which has become ubiquitous on the web as a way to offer extension points from applications online.
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">This was the whole point of pushing webhooks in 2007. Literally built this as a prototype. <a href="https://t.co/Wyoz0qXO9P">https://t.co/Wyoz0qXO9P</a></p>&mdash; Jeff Lindsay (@progrium) <a href="https://twitter.com/progrium/status/864588610858881029?ref_src=twsrc%5Etfw">May 16, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
