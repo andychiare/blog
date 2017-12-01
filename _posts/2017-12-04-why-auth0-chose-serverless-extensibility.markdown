@@ -50,7 +50,8 @@ If every interaction with a customer involved identifying an idea, putting it in
 
 The inspiration for custom code extensibility as a solution came from spreadsheets. Excel has significant functionality out of the box, but there is always a function, macro or calculation that is not available. However, you can write them yourself directly in Excel removing the dependency on Microsoft engineers.
 
-We wanted a similar experience for our users. A user should be able to log in to the dashboard, write a small amount of node.js code that executes later during authorization transactions.
+> **"We wanted a similar experience for our users. A user should be able to log in to the dashboard, write a small amount of node.js code that executes later during authorization transactions."**<br />
+> Eugenio Pace - Co-Founder, VP Customer Success
 
 Unlike webhooks, this experience does not expose your customer to the necessity of setting up servers to run a service. They can come in write their business logic in the textbox, debug it in place and put it in production. The motivation was keeping it extremely simple.
 
@@ -94,7 +95,10 @@ Once in production, we realized we were relying on the cutting edge of three tec
 
 The focus of version two of Webtask was to simplify the architecture and remove every anything that was not absolutely needed to increase the fault tolerance of the overall system.
 
-We started with the assumption that the virtual machines should operate entirely independently making them private universes. In terms of container management, the VMs have no business communicating with each other for anything but non-critical functionality like real-time logging.
+> **"We started with the assumption that the virtual machines should operate entirely independently making them private universes."**<br />
+> Tomasz Janczuk - Chief Webtask Architect
+
+In terms of container management, the VMs have no business communicating with each other for anything but non-critical functionality like real-time logging.
 
 This change removed the need for etcd because we no longer needed to exchange state between the virtual machines. It also removed the need for Fleet because a named container was allowed to exist on all the virtual machines in the cluster at any given time.
 
@@ -133,6 +137,9 @@ Compared to the node sandbox model which was like CGI creating a new process for
 
 The next functional change in Webtasks was a move from a pure sandbox model to a pre-provisioned model. We created a set of management APIs that allowed the creation of a webtask that could then be invoked separately.
 
+> **"Imagine our biggest customers having thousands of logins per second. Performancewise instead of having to send up to 100kb of code, directly sending the request to a webtask and get a response back dramatically increased throughput."**<br />
+> Sandrino di Mattia - Engineering Lead
+
 This change was a more traditional model bringing it conceptually in line with other FaaS providers like Lamda. Pre-provisioning had an advantage in allowing the system to optimize compilation of the code once and execute over and over. It also freed up the body of the request sent to the webtask making it much more useful for a large number of scenarios.
 
 ### Focus on startup latency
@@ -141,7 +148,8 @@ Auth0 is in a unique position from other FaaS providers in that our code execute
 
 Another aspect is customers who need to execute webtasks infrequently. Think of the typical authentication scenario; users come to work and log in then are done for the rest of the day. Users who come in later very frequently encounter a situation where our stack is cold.
 
-We put considerable effort into finding ways to optimize webtask startup latency, so it does not take seconds as Lambda takes from time to time unpredictably. This latency would reflect poorly on the end user experience.
+> **"We put considerable effort into finding ways to optimize webtask startup latency, so it does not take seconds as Lambda takes from time to time unpredictably. This latency would reflect poorly on the end user experience."**<br />
+> Tomasz Janczuk - Chief Webtask Architect
 
 A choice was made to keep a prewarmed pool of containers that are immediately ready to execute webtasks. When a request comes in, one that has not been seen in a while, the Webtasks platform picks a container that is already running from a pool of unassigned containers and reverse proxies that request to it. 
 
@@ -157,6 +165,11 @@ Adding extensibility to the product allowed field engineers to say "yes" very of
 Putting extensibility into the hands of customers also gives us great insights into where the market is going. If we see an extension being implemented again and again through the use of custom code, that is a validation of that feature and an opportunity to add in the core product.
 
 Multi-Factor Authentication came about this way. MFA was not a switch on the dashboard initially. It was merely a rule you applied to your account. Over time, our customers' usage of this rule indicated MFA was an important feature to have in the core product.
+
+For more examples, take a look at our [rules repository](https://github.com/auth0/rules) on Github. Every single one comes from a real-world customer use case.
+
+> **"Every event in the life cycle of the user can be expressed through code and in that way we can support any backend out there in a flash. No matter how customers encrypt or hash passwords; whatever they do is supported because they can provide the details using custom code."**<br />
+> Sandrino di Mattia - Engineering Lead
 
 ## Summary
 
