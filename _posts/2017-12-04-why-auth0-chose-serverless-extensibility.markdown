@@ -30,7 +30,7 @@ How did Auth0 get to the point of offering extensibility through a serverless pl
 
 In the early days at Auth0, there were two groups: Core and Field Engineering. Core focused on the core functionality of the authentication product, and the field engineers helped customers use the product in their applications. The company was discovering what customers needed in the product.
 
-Our customer's focus was on the authentication transaction. A lot of interesting features can attach to the process of someone is trying to login:
+Our customer's focus was on the authentication transaction. A lot of interesting features can attach to the process of someone trying to login:
 
 - Profile Enrichment
 - Progressive Profiling
@@ -48,13 +48,13 @@ If every interaction with a customer involved identifying an idea, putting it in
 
 ## Custom code extensibility
 
-The inspiration for custom code extensibility as a solution came from spreadsheets. Excel gives you much functionality out of the box, but there is always a function, macro or calculation that is not there. However, you can write them yourself directly in Excel removing the dependency on Microsoft engineers.
+The inspiration for custom code extensibility as a solution came from spreadsheets. Excel has significant functionality out of the box, but there is always a function, macro or calculation that is not available. However, you can write them yourself directly in Excel removing the dependency on Microsoft engineers.
 
 We wanted a similar experience for our users. A user should be able to log in to the dashboard, write a small amount of node.js code that executes later during authorization transactions.
 
 Unlike webhooks, this experience does not expose your customer to the necessity of setting up servers to run a service. They can come in write their business logic in the textbox, debug it in place and put it in production. The motivation was keeping it extremely simple.
 
-The earliest MVP version of this concept used [node sandbox](https://www.npmjs.com/package/node-sandbox
+The earliest MVP of this concept used [node sandbox](https://www.npmjs.com/package/node-sandbox
 ). It was very similar to a CGI model; spinning up a separate node process, send the rule code to execute in it and collecting the result. Execution all happened one process per authorization transaction.
 
 This implementation had some issues, primarily a lack of security. It was merely creating a process boundary between the core Auth0 stack and the customer's code. Node sandbox was primarily preventing well behaved, well-intentioned code from accidentally bringing down the authorization service or other sandboxed code.
@@ -104,11 +104,14 @@ At this point the only component of Core OS still in use was Docker. So, we drop
 
 ### Stabilizing real-time logging
 
-The third version of the Webtask stack focused on real-time logs. To this day it is the only feature in the Webtasks architecture that requires virtual machines to be aware of each other's existence.
+The third change to the Webtask stack focused on real-time logs. To this day it is the only feature in the Webtasks architecture that requires virtual machines to be aware of each other's existence.
 
 Real-time logs work by consolidating logging information into a single point. A client makes a management API request providing filtering information. Regardless of the virtual machine in the cluster that the client attaches to, it collects the real-time logging information from all other VMs and streams it back to the client on the HTTP response.
 
 The original implementation of this used [Kafka](https://kafka.apache.org/). Kafka is a very high throughput message broker optimized for log aggregation scenarios. There are many success stories from places like Netflix using it.
+
+> **"At the same time there was certainly some blood on the street with Kafka. There were some horror stories around management and so on."**<br />
+> Tomasz Janczuk - Chief Webtask Architect
 
 Kafka builds on top of [ZooKeeper](https://zookeeper.apache.org/) for distributed configuration management, similar to how Core OS uses etcd. It turned out, at the time, ZooKeeper had a few skeletons in the closet regarding stability. The Kafka ZooKeeper components were destabilizing enough to cause virtual machine failures. As with etcd, tracking down the issues was never-ending after three months.
 
@@ -124,19 +127,19 @@ The first version of Webtasks functionality started as a better equivalent of no
 
 When a new authorization request comes in the code authored by the customer is bundled up along with contextual information like the user object and request headers. This bundle is sent to the execution engine for execution. In this model, the Webtask cluster is entirely stateless and unaware of any notion of code being stored anywhere.
 
-Compared to the node sandbox model which was like CGI creating a new process for every request. This version of Webtasks and the way it was used was like FastCGI. We are still sending the code to execute every request, but the process persisted across many requests. This enhancement saved considerable time recreating the process.
+Compared to the node sandbox model which was like CGI creating a new process for every request. This version of Webtasks and the way it was used was like FastCGI. We were still sending the code to execute every request, but the process persisted across many requests. This enhancement saved considerable time recreating the process.
 
 ### Moving to pre-provisioning
 
-The next functional change in Webtasks was a move from a pure sandbox model to a pre-provisioned model. We created a set of management APIs that allowed the creation of a Webtask that could then be invoked separately.
+The next functional change in Webtasks was a move from a pure sandbox model to a pre-provisioned model. We created a set of management APIs that allowed the creation of a webtask that could then be invoked separately.
 
 This change was a more traditional model bringing it conceptually in line with other FaaS providers like Lamda. Pre-provisioning had an advantage in allowing the system to optimize compilation of the code once and execute over and over. It also freed up the body of the request sent to the webtask making it much more useful for a large number of scenarios.
 
 ### Focus on startup latency
 
-Auth0 is in a unique position from other FaaS providers in that our code executes in the UI path. With each execution, a user is sitting at a login dialog and watching a spinner spin. This time is when we have to execute all webtasks.
+Auth0 is in a unique position from other FaaS providers in that our code executes in the UI path. With each execution, a user is sitting at a login dialog and watching a spinner spin. There is a brief window of time that we have to execute all webtasks.
 
-Another aspect, are customers who need to execute webtasks infrequently. Think of the typical authentication scenario; users come to work and log in then are done for the rest of the day. Users who come in later very frequently encounter a situation where our stack is cold.
+Another aspect is customers who need to execute webtasks infrequently. Think of the typical authentication scenario; users come to work and log in then are done for the rest of the day. Users who come in later very frequently encounter a situation where our stack is cold.
 
 We put considerable effort into finding ways to optimize webtask startup latency, so it does not take seconds as Lambda takes from time to time unpredictably. This latency would reflect poorly on the end user experience.
 
