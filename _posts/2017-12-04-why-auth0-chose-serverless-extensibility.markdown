@@ -26,7 +26,7 @@ Previously, we wrote about the emerging pattern of [Serverless Extensibility](ht
 
 How did Auth0 get to the point of offering extensibility through a serverless platform? It has been a four-year journey that predates both [Amazon Lambda](https://aws.amazon.com/lambda/) and the term Serverless. Like all innovation, it starts with resource constraints, the need to give customers the features they wanted and making sales.
 
-## The Problem We Were Trying to Solve
+## The problem we were trying to solve
 
 In the early days at Auth0, there were two groups: Core and Field Engineering. Core focused on the core functionality of the authentication product, and the field engineers helped customers use the product in their applications. The company was discovering what customers needed in the product.
 
@@ -46,7 +46,7 @@ Moreover, sometimes building features into the core product for customers is not
 
 If every interaction with a customer involved identifying an idea, putting it in the backlog and coming back to them at a later date, it would add friction to the process and turn customers away.
 
-## Custom Code Extensibility
+## Custom code extensibility
 
 The inspiration for custom code extensibility as a solution came from spreadsheets. Excel gives you much functionality out of the box, but there is always a function, macro or calculation that is not there. However, you can write them yourself directly in Excel removing the dependency on Microsoft engineers.
 
@@ -72,7 +72,7 @@ The first prototype of the Webtask architecture was an interview exercise. Exten
 
 The stabilization effort was something entirely different. You cannot solve a stabilization problem by adding people to the team.
 
-## Evolving the Webtask Stack
+## Evolving the Webtask stack
 
 ### Creating the platform
 
@@ -116,7 +116,7 @@ We started looking for alternatives and landed on [ZeroMQ](http://zeromq.org/). 
 
 Switching to ZeroMQ was the single most stabilizing change we made in the history of the Webtask cluster. It was such an impressive improvement Tomasz wrote a [post about it](https://tomasz.janczuk.org/2015/09/from-kafka-to-zeromq-for-log-aggregation.html). That post received 10,000 views the first day it published. Others were apparently having similar issues.
 
-## Evolving Webtask Features
+## Evolving Webtask features
 
 ### Feature parity with node sandbox
 
