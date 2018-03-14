@@ -36,15 +36,15 @@ related:
 
 ---
 
-## API Scopes ---Access and identity tokens
+## API Scopes
 
 In order to enhance our client-server application, we are going to implement a more granular access control to the server's resources, so that specific users are allowed to make specific actions. In particular, we will add to our application an API to create new books and will restrict the access to this API only to specific users.
 
-This access granularity can be obtained by using *scopes*. *Scopes* are a feature provided by [OAuth2](https://oauth.net/2/) protocol allowing to limit the access granted to an access token.
+This access granularity can be obtained [by using *scopes*](https://auth0.com/docs/scopes). *Scopes* are a feature provided by [OAuth2](https://oauth.net/2/) protocol allowing to limit the access granted to an access token.
 
 ## Creating scopes for your APIs
 
-As a first step you need to create scopes for your APIs. So, open the [Auth0 dashboard](https://manage.auth0.com/#/apis) and select the *Scopes* tab in the APIs section, as shown below:
+As a first step you need to create scopes for your APIs. So, open the [Auth0 dashboard](https://manage.auth0.com/#/apis), click the *APIs* section and select the API created in the [first post](http://auth0.com/blog/developing-web-apps-with-asp-dot-net-core-2-dot-0-and-react-part-1) of the series. Then click the *Scopes* tab, as shown below:
 
 ![./xxx-images/api-scopes.png](./xxx-images/api-scopes.png)
 
@@ -66,11 +66,7 @@ Then click the *Auth0 Autorization* box to start the installation process. You w
 
 ![./xxx-images/auth0-authorization-install.png](./xxx-images/auth0-authorization-install.png)
 
-
-
 Once the extension is installed, you will see it listed in the *Installed Extensions* tab.
-
-
 
 ## Configuring permissions and roles
 
@@ -81,7 +77,7 @@ Now that you have installed the *Authorization Extension*, you can use it to con
 - *Roles* are collections of permissions. For example, we can define a role for administrators that have the permissions to read the list of books and to add a new book to the list.
 
 
-So, you can select the *Permissions* section in *Authorization Extension* and click the *Create Permission* button. You will be prompted to provide data defining the permission, as shown below:
+So, click the *Authorization Extension* shown in the *Installed Extensions* tab and a new window will be opened. Here, select the *Permissions* section and then click the *Create Permission* button in the upper right corner. You will be prompted to provide data defining the permission, as shown below:
 
 ![./xxx-images/create-permission.png](./xxx-images/create-permission.png)
 
@@ -89,7 +85,7 @@ Here you will provide the name of the permission, a description and the client a
 
 > **Note**: Ensure that the name of a permission is exactly the same as the corresponding scope.
 
-In our case, the resulting permissions configuration is as follows:
+In our case,  you will add one permission for `read:books` and one for `write:books`. For both permissions specify the client application associated with our React application. The final configuration should look like the following:
 
 ![./xxx-images/permissions.png](./xxx-images/permissions.png)
 
@@ -101,15 +97,11 @@ Use this form to create both roles. The final result should be as follows:
 
 ![./xxx-images/roles.png](./xxx-images/roles.png)
 
-
-
 ## Adding roles to users
 
 Next, you will need to associate roles to users. Actually, in *Users* section of the *Authorization Extension* you will find all the users already created in your *Auth0* platform. Here you can assign roles to each user by selecting him, using the *Roles* tab and clicking the *Add role to user* button. Now you can check the roles you want to assign the user, as shown by the following picture:
 
 ![./xxx-images/roles-to-user.png](./xxx-images/roles-to-user.png)
-
-
 
 ## Publishing permission rule
 
@@ -133,11 +125,9 @@ function (user, context, callback) {
     return callback(null, user, context);
   }
   
-  var permissions = user.permissions || [];
-  var requestedScopes = context.request.body.scope || context.request.query.scope;
-  var filteredScopes = requestedScopes.split(' ').filter( function(x) {
-    return x.indexOf(':') < 0;
-  });
+  const permissions = user.permissions || [];
+  const requestedScopes = context.request.body.scope || context.request.query.scope;
+  const filteredScopes = requestedScopes.split(' ').filter((x) => (x.indexOf(':') < 0));
   Array.prototype.push.apply(filteredScopes, permissions);
   context.accessToken.scope = filteredScopes.join(' ');
 
@@ -145,7 +135,7 @@ function (user, context, callback) {
 }
 ```
 
-The first line of the JavaScript function's body checks if the current client is our *Bookstore client*. If not, the rule is not executed. Otherwise, only the user's permissions are assigned to the access token's `scope` property. Once you have put this code, click the *Save* button.
+The first line of the JavaScript function's body checks if the current client is the *Bookstore client* created in the [second article](https://auth0.com/blog/developing-web-apps-with-asp-dot-net-core-2-dot-0-and-react-part-2/) of this series. If not, the rule is not executed. Otherwise, only the user's permissions are assigned to the access token's `scope` property. Once you have put this code, click the *Save* button.
 
 > **Note**: Keep in mind that the rules are executed in the order they are displayed in the *Rules* section.
 
@@ -157,7 +147,7 @@ After this configuration process on the [Auth0](https://manage.auth0.com/) platf
 
 Following this approach you need to define an *Authorization requirement* and an *Authorization handler*. The former is a collection of data containing the current user's rights. The latter evaluates the *Authorization requirement* to determine if access is allowed.
 
-Let's define the *Authorization requirement* as follows:
+Let's define the *Authorization requirement*. Add a `HasScopeRequirement.cs` file to the ASP.NET Core project and write the following code inside:
 
 ```c#
 public class HasScopeRequirement : IAuthorizationRequirement
@@ -173,9 +163,9 @@ public class HasScopeRequirement : IAuthorizationRequirement
 }
 ```
 
-The `HasScopeRequirement`class inherits from `IAuthorizationRequirement`and its constructor simply assigns the `scope` and the `issuer` passed as parameters to its public properties `Scope` and `Issuer`.
+The `HasScopeRequirement` class inherits from `IAuthorizationRequirement`and its constructor simply assigns the `scope` and the `issuer` passed as parameters to its public properties `Scope` and `Issuer`.
 
-The *Authorization handler* will be implemented as shown by the following code:
+The *Authorization handler* will be implemented in a `HasScopeHandler.cs` file as shown by the following code:
 
 ```c#
 public class HasScopeHandler : AuthorizationHandler<HasScopeRequirement>
@@ -201,7 +191,7 @@ The class `HasScopeHandler` inherits from `AuthorizationHandler`. It overrides t
 
 If the current user principal hasn't a `scope` claim issued by the trusted `Issuer` defined in the authorization requirement, the authorization is denied. Otherwise, the user's scopes are compared with the requirement's scope. Only if al least one user's scope matches the requirement's scope, the authorization is granted.
 
-Now, you need to change the `ConfigurationServices()` method in `Startup` class in order to make available the newly created Authorization requirement and handler, as in the following:
+Now, you need to change the `ConfigurationServices()` method in the `Startup` class in order to make available the newly created Authorization requirement and handler, as in the following:
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
@@ -235,13 +225,13 @@ The final step to setup scope management at the API side is to pass the `read:bo
 [Route("api/[controller]")]
 public class BooksController : Controller
 {
-	[HttpGet, Authorize("read:books")]
-	public IEnumerable<Book> Get()
-	{
-		var resultBookList = new Book[] { ... };
+  [HttpGet, Authorize("read:books")]
+  public IEnumerable<Book> Get()
+  {
+    var resultBookList = new Book[] { ... };
 
-		return resultBookList;
-	}
+    return resultBookList;
+  }
 }
 ```
 
@@ -322,7 +312,7 @@ public class BooksController : Controller
     	return bookList;
 	}
 
-	...
+	//... etc
 }
 ```
 
@@ -334,17 +324,16 @@ Now you can add a new API to add a book to the current book list:
 [Route("api/[controller]")]
 public class BooksController : Controller
 {
-	...
-	
-	[HttpPost, Authorize("write:books")]
-    public void Post([FromBody] Book book)
-    {
-		bookList.Add(book);
-	}
+  //... bookList definition
 
-	...
+  [HttpPost, Authorize("write:books")]
+  public void Post([FromBody] Book book)
+  {
+    bookList.Add(book);
+  }
+
+  //... etc
 }
-
 ```
 
 As you can see, the new API simply adds to the list of books the book representation received from the body of the HTTP POST request. The important thing is that the API has been marked with the `Authorize` attribute by specifying that the `write:books` permission is required.
@@ -359,10 +348,10 @@ First, you add in the home page a link that will open a page allowing to submit 
 
 ```javascript
 class Home extends React.Component {
-  ...
+  //... constructor and other statements
   
   render() {
-	...
+	//... other statements
     return  <div>
               <Link to="/bookForm">Add a book</Link>
               <ul>
@@ -380,16 +369,19 @@ This simple addition makes the home page looking as follows:
 Then you need to define the route used in the `Link` component by creating it in the `App` component. The new route definition will be as follows:
 
 ```javascript
+//... other imports
+import BookForm from './BookForm';
+
 class App extends Component {
-  ...
+  //... other statements
   
   render() {
-	let logoutButton =  this.createLogoutButton();
+	const logoutButton =  this.createLogoutButton();
 	
     return (
       <div className="App">
         <header className="App-header">
-		  {logoutButton}
+          {logoutButton}
           <h1 className="App-title">My Bookstore</h1>
         </header>
         <Switch>
@@ -405,7 +397,7 @@ class App extends Component {
 
 The `/bookForm` route is mapped to the `BookForm` component along with two props representing the browser history and the authentication service implemented in `AuthService` module.
 
-Let's implement the `BookForm` component as shown in the following:
+Let's implement the `BookForm` component by creating a file named `BookForm.js` and putting inside it the following code:
 
 ```javascript
 import React from 'react';
@@ -457,11 +449,38 @@ export default BookForm;
 
 ```
 
-The markup generated by the `render()` method of the component defines a classical form with two text box and a submit button. Its appearance is as shown by the following picture:
+The markup generated by the `render()` method of the component defines a classic form with two text box and a submit button. Its appearance is as shown by the following picture:
 
 ![./xxx-images/book-form.png](./xxx-images/book-form.png)
 
-The styles of the form are defined in the `BookForm.css` file imported by the component.
+The styles of the form are defined in the `BookForm.css` file imported by the component. Its content is as follows:
+
+```css
+.formContainer {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.col-50 {
+    float: left;
+    width: 40%;
+    margin-top: 6px;
+    text-align: right;
+}
+
+input[type=text] {
+    width: 50%;
+}
+```
 
 Looking at the component's code, you can find that the constructor initializes the state of the component. It is defined as an object with empty string for the author and the title of a book. You can also find two methods, `handleAuthorChange()` and `handleTitleChange()`, used to apply changes from the form elements to the component's state. The `handleFormSubmit()` method, bound to the `onSubmit` event of the form, is not actually implemented in the code above. You can implement it as follows:
 
@@ -493,7 +512,7 @@ As you can see, the first line of the method prevents the default behaviour of f
 
 ## Disabling book addition for not authorized users
 
-The implementation we have made so far works fine. If you access the application by using an admin user, you will be able to add a new book by clicking the *Add a book* link, filling the form and submitting it to the server. On the other hand, if you access the application by using a simple user, that is a non admin user, you will be able to click the *Add a button* link and fill the book form, but when you will try to submit the form's data to the server you will receive a `403` HTTP status code.
+The implementation we have made so far works fine. If you access the application by using an admin user, you will be able to add a new book by clicking the *Add a book* link, filling the form and submitting it to the server. On the other hand, if you access the application by using a simple user (i.e. a non-admin user) you will be able to click on the *Add a button* link and fill the book form, but when you will try to submit the form's data to the server you will receive a `403` HTTP status code.
 
 Even if this behaviour is functionally correct, letting the user to access the book form when he is not authorized to send data to the server is very annoying. You should make sure that only admin users access the book form. In other words, only admin users should see the *Add a button* link.
 
@@ -503,7 +522,7 @@ The first thing you need to do is getting the scopes returned by the authorizati
 
 ```javascript
  setSession(authResult) {
-    ...
+    //... other statements
     localStorage.setItem('scopes', JSON.stringify(authResult.scope || ""));
   }
 ```
@@ -514,7 +533,7 @@ Now you can add the `hasScopes()` method to the `AuthService` class:
 
 ```javascript
 export default class AuthService {
-  ...
+  //... other statements
   
   hasScopes(scopes) {
     const grantedScopes = JSON.parse(localStorage.getItem('scopes')).split(' ');
@@ -529,20 +548,21 @@ You will use the `hasScopes()` method inside the `render()` method of the `Home`
 
 ```javascript
 class Home extends React.Component {
-  ...
+  //... other statements
+    
   render() {
-    let bookList = this.state.bookList.map((book) => 
+    const bookList = this.state.bookList.map((book) => 
                             <li><i>{book.author}</i> - <h3>{book.title}</h3></li>);
-    let addBookButton = this.props.auth.hasScopes(["write:books"])? 
-        <Link to="/bookForm">Add a book</Link> 
-    	: null;
+    const addBookButton = this.props.auth.hasScopes(["write:books"])? 
+      <Link to="/bookForm">Add a book</Link> 
+      : null;
 
     return  <div>
-              {addBookButton}
-              <ul>
-                {bookList}
-              </ul>
-            </div>;
+      {addBookButton}
+      <ul>
+        {bookList}
+      </ul>
+      </div>;
   }
 }
 ```
