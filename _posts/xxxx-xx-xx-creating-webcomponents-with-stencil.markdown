@@ -24,7 +24,7 @@ related:
 
 ---
 
-**TL;DR:** This post will show you how to create Web Components by using Stencil, a tool that allows you to use a high level syntax to define components and that generates Web Components based on vanilla JavaScript. In the article we will build a simple Web Components whose [final code you can find in this GitHub repository](https://github.com/andychiare/rating-stencil-component).
+**TL;DR:** This post will show you how to create Web Components by using Stencil, a tool that allows you to use a high level syntax to define components and that generates Web Components based on vanilla JavaScript. In the article we will build a simple Web Component whose [final code you can find in this GitHub repository](https://github.com/andychiare/rating-stencil-component).
 
 
 
@@ -34,23 +34,23 @@ related:
 
 Have you ever struggled with integrating UI components implemented for different JavaScript frameworks or libraries, say for example *Angular* or *React* or *Vue* or whatever? Are you tired to reimplement the same UI component for each new framework or library? Do you know that a solution to this problem has already existed for some years? It is called [Web Components](https://www.webcomponents.org/).
 
-Web Components are a set of [standard specifications](https://www.webcomponents.org/specs) that allow to create custom and reusable components by simply using HTML, CSS and JavaScript. In other words, Web Components allow you to define new custom HTML tags and behaviours by using standard technologies. These custom components should be natively supported by any Web browser, regardless the framework you are using to build your Web pages or your Web application. This should be the end of any JavaScript library interoperability nightmare, but... but there are still a few problems: mainly the browser support for all the features and the low level of Web Components APIs.
+Web Components are a set of [standard specifications](https://www.webcomponents.org/specs) that allow to create custom and reusable components by simply using HTML, CSS and JavaScript. In other words, Web Components allow you to define new custom HTML tags and behaviours by using standard technologies. These custom components should be natively supported by any Web browser, regardless the framework you are using to build your Web pages or your Web application. This should be the end of any JavaScript library interoperability nightmare, but... but there are still a few problems: mainly [the browser support for all the features](https://caniuse.com/#search=web%20component) and the low level of Web Components APIs.
 
 ## How Stencil fits in the Web Components world
 
-In past years a few libraries tried to remedy these Web Components problems providing a higher level of abstraction and filling the browser's lack of support regarding some basic features. Among others, [Polymer](https://www.polymer-project.org/) and [X-Tag](https://x-tag.github.io/) helped many developers to adopt Web Components in their projects.
+In past years a few libraries tried to remedy these Web Component problems providing a higher level of abstraction and filling the browser's lack of support regarding some basic features. Among others, [Polymer](https://www.polymer-project.org/) and [X-Tag](https://x-tag.github.io/) helped many developers to adopt Web Components in their projects.
 
-In [August 2017 the Ionic team announced](https://www.youtube.com/watch?v=UfD-k7aHkQE) [Stencil.js](https://stenciljs.com), a performant compiler that generates Web Components by combining the best concepts of the most popular UI JavaScript frameworks and libraries. Unlike *Polymer* and *X-Tag*, *Stencil* is not another library that allows you to use Web Components in your project. It is a building tool that allows you to use a high level abstraction to define your UI components and to generate pure JavaScript code implementing standard-based Web Components. The compiled code runs in all major browsers, since Stencil uses a small polyfill only on browsers that lack some needed features.
+In [August 2017 the Ionic team announced](https://www.youtube.com/watch?v=UfD-k7aHkQE) [Stencil.js](https://stenciljs.com), a performant compiler that generates Web Components by combining the best concepts of the most popular UI JavaScript frameworks and libraries. Unlike *Polymer* and *X-Tag*, *Stencil* is not another library that allows you to use Web Components in your project. It is a building tool that allows you to use a high-level abstraction to define your UI components and to generate pure JavaScript code implementing standard-based Web Components. The compiled code runs in all major browsers, since Stencil uses a small polyfill only on browsers that lack some needed features.
 
-So, let's give a try to Stencil and see how to build and use a Web Component.
+So, let's give Stencil a try and see how to build and use a Web Component.
 
 ## Setup of the Stencil environment
 
-To become familiar with *Stencil*, we are going to build a rating Web Component, that is UI component the allows the user to provide his feedback about a product, an article or whatever by assigning a number of stars like in the following picture:
+To become familiar with *Stencil*, we are going to build a rating Web Component, that is a UI component allowing the user to provide his feedback about a product, an article or whatever by assigning a number of stars like in the following picture:
 
 ![](./xxx-images/starRating.png)
 
-As a first step towards this goal, you need to setup the *Stencil* development environment. So, be sure to get installed version 6.11.0 of [Node.js](https://nodejs.org) and then clone the component starter project from the Ionic team's GitHub repository, as shown below:
+As a first step towards this goal, you need to setup the *Stencil* development environment. So, be sure to get installed at least version 6.11.0 of [Node.js](https://nodejs.org) and then clone the component starter project from the Ionic team's GitHub repository, as shown below:
 
 ```shell
 git clone https://github.com/ionic-team/stencil-component-starter rating-stencil-component
@@ -59,9 +59,9 @@ git remote rm origin
 npm install
 ```
 
-These commands clone the `stencil-component-starter` git repository into a local folder named `rating-stencil-component`, then change the current folder and remove the remote repository's reference. The last command installs all dependencies required by the *Node.js* starter project.
+These commands clone the `stencil-component-starter` repository into a local folder named `rating-stencil-component`, then change the current folder and remove the remote repository's reference. The last command installs all dependencies required by the *Node.js* starter project.
 
-The component starter project provides a true *Node.js* development environment. In particular, you can see a few configuration files in the root folder and the `src` folder containing a folder structure, as shown in the following picture:
+The component starter project provides a standard *Node.js* development environment. In particular, you can see a few configuration files in the root folder and the `src` folder containing a folder structure, as shown in the following picture:
 
 ![](E:\Data\xxxPersonal\stencil-test\my-starter-web-component\my-component\img\project-folders.png)
 
@@ -69,7 +69,7 @@ The component starter project contains a very basic and working component that y
 
 ![](./xxx-images/running-starter-component.png)
 
-We will build our component by exploiting the infrastructure of this project.
+We are going to build our component by exploiting the infrastructure of this basic project.
 
 ## Creating a basic component
 
@@ -81,7 +81,7 @@ In order to implement our rating component, let's create a `my-rating-component`
 }
 ```
 
-The first `.tsx` will contain the following TypeScript code:
+The `.tsx` file will contain the following TypeScript code:
 
 ```typescript
 import  { Component } from  '@stencil/core';
@@ -107,7 +107,7 @@ export  class  MyRatingComponent  {
 }
 ```
 
-The `.tsx` extension indicates that the file contains TypeScript and JSX code. Actually these are the languages used by Stencil to define the component. A Stencil component is a TypeScript class, `MyRatingComponent` in the example, that implements a `render()` method. This class is decorated by the `@Component` decorator, previously imported from the `stencil/core` module. This decorator allows to define some meta-data about the component itself. In particular we defined the tag name that will be associated with the component. This means that you will use the `<my-rating></my-rating>` tag to put this component inside a HTML page. We also defined the CSS file containing styling settings for the component via the `styleUrl` property. The last property, `shadow`, isolates the internal component DOM and styles so that it is shielded by name conflicts and accidental collisions. This feature should be granted by the Web Component's Shadow DOM. Anyway, if the browser doesn't support it, a polyfill will be used.
+The `.tsx` extension indicates that the file contains TypeScript and JSX code. Actually these are the languages used by Stencil to define the component. A Stencil component is a TypeScript class, `MyRatingComponent` in the example, that implements a `render()` method. This class is decorated by the `@Component` decorator, previously imported from the `stencil/core` module. This decorator allows to define some meta-data about the component itself. In particular we defined the tag name that will be associated with the component. This means that you will use the `<my-rating></my-rating>` element to put this component inside a HTML page. We also defined the CSS file containing styling settings for the component via the `styleUrl` property. The last property, `shadow`, isolates the internal component DOM and styles so that it is shielded by name conflicts and accidental collisions. This feature should be granted by the [Web Component's Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom). Anyway, if the browser doesn't support it, a polyfill will be used.
 
 The `render()` method describes the component's appearance by using JSX expressions. In our example the component's markup consists of a sequence of six span HTML elements: three of them contain the HTML entity for the full star (`&#x2605;`) and the other three contain the code for the empty star (`&#x2606;`).
 
@@ -133,6 +133,8 @@ Now that you have defined your first component, you can can remove the default c
 As you can see, the body of the HTML page contains the newly defined `<my-rating>` tag that identifies our component. After saving the `index.html` file, type `npm start` in a console window and you will see your component in a browser as in the following picture:
 
 ![](./xxx-images/basic-component.png)
+
+> **Note**: The Stencil development environment provides support for hot reloading, so if your environment is running after an `npm start`, any changes to the project's files will cause its automatic rebuilding and running. This means that you don't need to type again `npm start`.
 
 ## Adding properties
 
@@ -174,7 +176,7 @@ export  class  MyRatingComponent  {
 }
 ```
 
-As a first difference with respect to the previous version you can see that we imported the `@Prop()` decorator. This decorator allows to map the properties of the component class to attributes in the markup side of the component. We added the `maxValue` property, that represents the maximum number of stars to show, and the `value` property, that indicates the current rating value and so the number of full star to be shown. As you can see, each property has a default value. These properties decorated with `@Prop()` allows you to use the component's markup as follows:
+As a first difference with respect to the previous version you can see that we imported the `@Prop()` decorator. This decorator allows to map the properties of the component class to attributes in the markup side of the component. We added the `maxValue` property, that represents the maximum number of stars to show, and the `value` property, that indicates the current rating value and so the number of full stars to be shown. As you can see, each property has a default value. These properties decorated with `@Prop()` allows you to use the component's markup as follows:
 
 ```html
 <my-rating max-value="6" value="2"></my-rating>
@@ -182,7 +184,7 @@ As a first difference with respect to the previous version you can see that we i
 
 By using this markup you are mapping the value of `max-value` attribute to the `maxValue` property and the value of `value` attribute to the `value` property. Notice how the [kebab case](http://wiki.c2.com/?KebabCase) naming style of the attribute names is mapped to the camel case naming style of the class properties.
 
-Finally, the `createStarList()` method dynamically creates the sequence of the starts to display based on `maxValue` and `value` properties' value.
+Finally, the `createStarList()` method dynamically creates the sequence of the stars to display based on `maxValue` and `value` properties' value.
 
 By applying these changes you will get the following result:
 
@@ -219,13 +221,13 @@ We assigned an `id` attribute to the component's markup and added a script block
 
 ## Managing component state
 
-Now we want to add more interactivity to our rating component. We want the number of full stars of the component to follow the mouse movement when it is over it. It should return to its original number when the mouse is out of its area, like in the following picture:
+Now we want to add more interactivity to our rating component. We want the number of full stars of the component to follow the mouse movement when it is over it. It should return to its original number when the mouse is out of its area, like in the following animation:
 
 ![](E:/Data/xxxPersonal/Auth0/fork/blog/_posts/xxx-images/animated-rating-component.gif)
 
-In addition we want to set a new value when the user clicks on one of the component's stars.
+In addition, we want to set a new value when the user clicks on one of the component's stars.
 
-In order to manage this dynamic change of stars you can assign an internal state to your component. The state of a component is a set of data internally managed by the component itself. This data cannot be directly changed by the user, but the component can modify it accordingly to its internal logic. Any change to the state causes the execution of the `render()` method.
+In order to manage this dynamic change of stars, you can assign an internal state to your component. The state of a component is a set of data internally managed by the component itself. This data cannot be directly changed by the user, but the component can modify it accordingly to its internal logic. Any change to the state causes the execution of the `render()` method.
 
 Stencil allows to define the component state through the `@State()` decorator, so we can add a new property to internally track the stars to display in a given moment. The following is a first change to your code toward the dynamic behaviour of the rating component:
 
@@ -267,13 +269,13 @@ export  class  MyRatingComponent  {
 }
 ```
 
-With respect to the previous version, this code imports the `@State()` decorator and apply it to the newly introduced `starList` property. This property is an array of objects and represents the component state that will contain the JSX description of the stars to display. Consequently, the `createStarList()` method has been modified so that is assigns the resulting array to the state property. Finally the `starList` property is used inside the JSX expression returned by the `render()` method.
+With respect to the previous version, this code imports the `@State()` decorator and apply it to the newly introduced `starList` property. This property is an array of objects and represents the component state that will contain the JSX description of the stars to display. Consequently, the `createStarList()` method has been modified so that is assigns the resulting array to the state property. Finally, the `starList` property is used inside the JSX expression returned by the `render()` method.
 
-> **Note**: Stencil watches state and props for changes in order to run the `render()` method. However it actually compare references for changes, so a change in data inside an array or to an object's property don't cause a re-rendering of the component. You need to assign a new array or object to the state.
+> **Note**: Stencil watches state and props for changes in order to run the `render()` method. However it actually compares references for changes, so a change in data inside an array or to an object's property doesn't cause a re-rendering of the component. You need to assign a new array or object to the state.
 
 ## Handling events
 
-Once we added support for state management, let's make the user to interact with our component. Now you need to capture mouse events in order to create the visual effect described above and to allow the user to assign a new rating value. You can handle the needed mouse event by adding to the component some new code, as shown in the following:
+Once we added support for state management, let's make the user to interact with our component. For this purpose, you need to capture mouse events in order to create the visual effect described above and to allow the user to assign a new rating value. You can handle the needed mouse event by adding to the component some new code, as shown in the following:
 
 ```typescript
 import  { Component, Prop, State } from  '@stencil/core';
@@ -324,7 +326,7 @@ The first one is a slightly changed version of previous `createStarList()` metho
 
 The `setValue()` method takes the new value, assigns it to the `value` property and calls the `createStarList()` method to generate the new list of stars.
 
-Now let's restore the previous version of the `index.html`file  by removing the `setTimeout()` code. It will look as follows:
+Now let's restore the previous version of the `index.html` file  by removing the `setTimeout()` code. It will look as follows:
 
 ```html
 <!DOCTYPE html>
@@ -349,11 +351,11 @@ Unfortunately running the code written until now results in a blank page. What h
 
 Reviewing the code, you can see that the `render()` method include the `starList` property in its JSX expression. This property is assigned inside the `createStarList()` method, but who does invoke this method in the initial step of the component creation?
 
-You need to invoke the `createStarList()` method to correctly initialize your component. You may think to invoke it in the component's constructor, but it will have a strange behaviour: its initial visualization will take into account the default values of `value` and `maxValue` properties, since the list of star will be built before the component receives the correct values from the DOM.
+You need to invoke the `createStarList()` method to correctly initialize your component. You may think to invoke it in the component's constructor, but it will have a strange behaviour: its initial visualization will take into account the default values of `value` and `maxValue` properties, since the list of stars will be built before the component receives the correct values from the DOM.
 
 The right moment to initialize the component should be when it has been loaded into the DOM.
 
-Fortunately Stencil provide us with a few hooks to handle the various events of the component life cycle:
+Fortunately, Stencil provides us with a few hooks to handle the various events of the component lifecycle:
 
 - `componentWillLoad`
   The component is ready to be loaded into the DOM, but it is not rendered yet
@@ -366,7 +368,7 @@ Fortunately Stencil provide us with a few hooks to handle the various events of 
 - `componentDidUnload`
   The component has been removed from the DOM
 
-To use this hooks you simply need to implement in your component a method with the same name.
+To use this hooks you simply need to implement a method with the same name in your component.
 
 So, in our case, you can implement the `componentWillLoad()` method and initialize the component, as shown below:
 
@@ -421,11 +423,11 @@ This small change solves our issue, but another problem still remains: when a us
 
 ## Managing mutable properties
 
-We said above that a component property decorated with `@Prop()` acquires a reactive nature. This means that if a change to the property occurs from the external of the component, this immediately fires the re-rendering of the component itself. However the property change can only occur by an external action. Props are immutable from inside the component. This means that an internal attempt change the value of a prop doesn't work. This is the reason why the `setValue()` method doesn't work as expected.
+We said above that a component property decorated with `@Prop()` acquires a reactive nature. This means that if a change to the property occurs from the external of the component, this immediately fires the re-rendering of the component itself. However, the property change can only occur by an external action. Props are immutable from inside the component. This means that an internal attempt change the value of a prop doesn't work. This is the reason why the `setValue()` method doesn't work as expected.
 
 There are a couple of solutions to this issue.
 
-The first solution requires to define a new state property, say `internalValue`, and to refer to this property instead of the `value` property to generate the list of full star. If you choose this way, your component's code will look as follows:
+The first solution requires to define a new state property, say `internalValue`, and to refer to this property instead of the `value` property to generate the list of full stars. If you choose this way, your component's code will look as follows:
 
 ```typescript
 import  { Component, Prop, State } from  '@stencil/core';
@@ -477,7 +479,7 @@ export  class  MyRatingComponent  {
 
 This code solves the problem but adds duplicate information inside the component.
 
-The second solution is easier to implement and is based on declaring a prop as *mutable*. You can accomplish this by simply passing the `{mutable: true}` object to the `@Prop()` decorator. In this case your code will look as follows:
+The second solution is easier to implement and is based on declaring a prop as *mutable*. You can accomplish this by simply passing the `{mutable: true}` object to the `@Prop()` decorator. In this case, your code will look as follows:
 
 ```typescript
 import  { Component, Prop, State } from  '@stencil/core';
@@ -613,7 +615,7 @@ We simply added an event listener that will show an alert with the new value ass
 
 ## Building for production
 
-Now that we have a working component and are satisfied of its features, we can prepare it for production building. Since we used the component starter project, you will found around references to a generic  component's name. For example, if you open the `stencil.config.js` file in a text editor, you will find the following content:
+Now that we have a working component and are satisfied with its features, we can prepare it for production building. Since we used the component starter project, you will found references to a generic component's name. For example, if you open the `stencil.config.js` file in a text editor, you will find the following content:
 
 ```javascript
 exports.config = {
@@ -677,7 +679,7 @@ You should consistently change the reference to the generic names *my-component*
 
 Once you have prepared your build configuration, type the command `npm run build` to start the building task.
 
-After a few seconds you will find a `dist` folder in the root of the project folder with everything you need to use your brand new Web Component. This folder contains three subfolder and one file:
+After a few seconds, you will find a `dist` folder in the root of the project folder with everything you need to use your brand new Web Component. This folder contains three subfolders and one file:
 
 - `my-rating.js`
   This file is the entry point of our component.
@@ -689,7 +691,7 @@ After a few seconds you will find a `dist` folder in the root of the project fol
 - `types`
   This folder contains the TypeScript definitions that may be useful when you use your component in a TypeScript application
 
-In other words, Stencil generates code for different production scenarios. You can bring everything every time or make a selection. Anyway, the minimal content required in a context of HTML and vanilla JavaScript consists of `my-rating.js` file and `my-rating` folder.
+In other words, Stencil generates code for different production scenarios. You can bring everything every time or make a selection. Anyway, the minimal content required in a context with HTML and vanilla JavaScript consists of `my-rating.js` file and `my-rating` folder.
 
 ## Using the component in your application
 
@@ -719,7 +721,7 @@ In order to use your rating component in a plain HTML page you should simply ins
 </html>
 ```
 
-Here we created a HTML page with the same logic we used in the development environment.
+Here we created an HTML page with the same logic we used in the development environment.
 
 If you have an application built with React, you can still use your rating component without any problem. Assuming you have built your React app with [create-react-app](https://github.com/facebook/create-react-app), you need to copy the folder containing the distribution code inside the `public` folder of your project. Then open the `index.html` file and put in it the same  HTML script element we've seen for the vanilla JavaScript case. Now you can use the `<my-rating>` tag inside any JSX expression in your application. For example, the following is the standard App component created by `create-react-app`  with the rating component used in the JSX:
 
@@ -748,7 +750,7 @@ class App extends Component {
 export default App;
 ```
 
-Similarly, you can integrate the rating component in your Angular application. In this case we assume that your application has been created with [Angular CLI](https://cli.angular.io/), so the folder of the Web Component should be copied in the `asset` folder of the Angular project. As usual, you need to put the script reference in the `index.html` file to make the component's code available. Now you need to change the `app.module.ts` file as in the following example:
+Similarly, you can integrate the rating component in your Angular application. In this case, we assume that your application has been created with [Angular CLI](https://cli.angular.io/), so the folder of the Web Component should be copied in the `asset` folder of the Angular project. As usual, you need to put the script reference in the `index.html` file to make the component's code available. Now you need to change the `app.module.ts` file as in the following example:
 
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
