@@ -26,7 +26,7 @@ related:
 - xxxxxxxxxx
 ---
 
-**TL;DR:** [Server-Sent Events](https://html.spec.whatwg.org/multipage/server-sent-events.html) or SSE is a standard enabling a Web server to push data to the client. In this article you will learn how to use them by building a simple application with React and Node.js. However, the concepts you will learn following this tutorial are applicable to any language and technology. [You can find the final code of the application in this GitHub repository](https://github.com/andychiare/server-sent-events).
+**TL;DR:** [Server-Sent Events](https://html.spec.whatwg.org/multipage/server-sent-events.html) or SSE is a standard enabling a Web server to push data to the client. In this article, we will learn how to use them by building a simple application with React and Node.js. However, the concepts you will learn following this tutorial are applicable to any language and technology. [You can find the final code of the application in this GitHub repository](https://github.com/andychiare/server-sent-events).
 
 ---
 
@@ -40,7 +40,7 @@ So let's take a look at how to use Server-Sent Events in a realistic application
 
 ## Let's Build a Flight Timetable
 
-In order to show how to use the Server-Sent Events, we are going to implement a simple flight timetable similar to the ones you can find in any airport. The timetable is a simple web page showing a list of flights as shown in the following picture:
+In order to show how to use the Server-Sent Events, we are going to implement a simple flight timetable similar to the ones you can find at any airport. The timetable is a simple web page showing a list of flights as shown in the following picture:
 
 ![](.\xxx-images\flights-timetable.png)
 
@@ -50,7 +50,7 @@ So, let's start coding and discover how Server-Sent Events work.
 
 ## Starting to Build the React Client
 
-As a first step, let's build our client application. To make things simple, you will use [create-react-app](https://github.com/facebook/create-react-app) to setup the React-based client. So, be sure to get installed [Node.js](https://nodejs.org) on your machine and type the following command in a shell window:
+As a first step, let's build our client application. To make things simple, you will use [create-react-app](https://github.com/facebook/create-react-app) to set up the React-based client. So, be sure to get installed [Node.js](https://nodejs.org) on your machine and type the following command in a shell window:
 
 ```shell
 npm install -g create-react-app
@@ -115,7 +115,7 @@ class App extends Component {
 export default App;
 ```
 
-Here you are importing the stuff you need to setup the flight timetable. In particular, in addition to standard React basic components, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module. This function provides your application with the flights' data and you use it in the constructor of the `App` component, where data are assigned to the component state. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. Finally, you put the `ReactTable` component in the JSX output of the `render()` method by specifying the flights' data and the columns mapping.
+Here you are importing the stuff you need to set up the flight timetable. In particular, in addition to standard React basic components, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module. This function provides your application with the flights' data and you use it in the constructor of the `App` component, where data are assigned to the component state. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. Finally, you put the `ReactTable` component in the JSX output of the `render()` method by specifying the flights' data and the columns mapping.
 
 Now let's take a look at the `DataProvider` module:
 
@@ -323,7 +323,7 @@ This means that the JavaScript code of the React client running on your browser 
 
 We could get around the problem by simply adding a `proxy` value in the `package.json` file, as said in the [create-react-app documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#proxying-api-requests-in-development). However, due to a [known issue](https://github.com/facebook/create-react-app/issues/3391), currently this workaround is not applicable.
 
-So, in order to make client and server to communicate, we need to enable CORS ([Cross-origin resource sharing](https://auth0.com/docs/cross-origin-authentication)). With this approach, the server authorizes a client published on a different domain to request its resources. To enable CORS in our Node.js server we simply add a new header to be sent to the client: the `Access-Control-Allow-Origin` header. Our initial response now becomes as shown below:
+So, in order to make the client and server to communicate, we need to enable CORS ([Cross-origin resource sharing](https://auth0.com/docs/cross-origin-authentication)). With this approach, the server authorizes a client published on a different domain to request its resources. To enable CORS in our Node.js server we simply add a new header to be sent to the client: the `Access-Control-Allow-Origin` header. Our initial response now becomes as shown below:
 
 ```javascript
     response.writeHead(200, {
@@ -334,7 +334,7 @@ So, in order to make client and server to communicate, we need to enable CORS ([
     });
 ```
 
-The asterisk assigned to the `Access-Control-Allow-Origin` header indicates that any client is authorized to access this URL. It may not be the desired solution in a production environment. In fact, in the production environment you should adopt a different approach, such as put the two applications under the same domain, by using a reverse proxy, or by enabling [CORS](https://auth0.com/docs/cross-origin-authentication) selectively, that is authorizing only specific domains.
+The asterisk assigned to the `Access-Control-Allow-Origin` header indicates that any client is authorized to access this URL. It may not be the desired solution in a production environment. In fact, in the production environment, you should adopt a different approach, such as put the two applications under the same domain, by using a reverse proxy, or by enabling [CORS](https://auth0.com/docs/cross-origin-authentication) selectively, that is authorizing only specific domains.
 
 Once you have enabled CORS on the Node.js server, you should change the URL passed to the `EventSource()` constructor. Now the `EventSource` object initialization in the React client should look like the following:
 
@@ -342,7 +342,7 @@ Once you have enabled CORS on the Node.js server, you should change the URL pass
 this.eventSource = new EventSource('http://localhost:5000/events');
 ```
 
-Now all is ready to run. So, first run the server then launch the client application. After a few seconds you should see your browser showing something like the following:
+Now all is ready! Run the server then launch the client application. After a few seconds you should see your browser showing something like the following:
 
 ![](.\xxx-images\animated-flights-timetable.gif)
 
@@ -486,7 +486,7 @@ Let's consider the case where the client wants to stop the event stream. Create 
   }
 ```
 
-Here we added a <button> element and bound the click event to the `stopUdates()` method of the same component. This method will look like the following:
+Here we added a <button> element and bound the click event to the `stopUpdates()` method of the same component. This method will look like the following:
 
 ```javascript
   stopUpdates() {
@@ -727,7 +727,7 @@ function checkConnectionToRestore(request, response, eventHistory) {
 
 We introduced the `eventHistory` array, where the events sent to the client are stored.
 
-Then we assigned to the `checkConnectionToRestore()` function the task of checking and restoring possible broken connections, and encapsulated the code for event generation in the `sendEvents()` function.
+Then we assigned to the `checkConnectionToRestore()` function the task of checking and restoring possible broken connections and encapsulated the code for event generation in the `sendEvents()` function.
 
 You can see that now each time an event is sent to the client, it is also stored in the `eventHistory` array, as you can check in the following code:
 
