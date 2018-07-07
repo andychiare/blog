@@ -62,9 +62,9 @@ This command will install *create-react-app* on your computer. Then let's create
 create-react-app client
 ```
 
-After a few seconds, you will get a `client` folder with all you need inside it. In particular, the `src` subfolder contains the source code of your new brand application. Our purpose is to change the code of this basic React application and replace it with our flight timetable frontend application.
+After a few seconds, you will get a `client` folder with all you need inside it. In particular, the `src` subfolder contains the source code of your brand-new application. Our goal is to change the code of this basic React application and replace it with our flight timetable frontend application.
 
-Since our application will show data in a tabular form, you will install a React component that simplifies the task of rendering data in a table: [React Table](https://react-table.js.org). To add this component to your application, type the following command inside the `client` folder:
+Since our application will show data in a tabular form, you will install a React component that simplifies the task of rendering data in a table: [React Table](https://react-table.js.org). To add this component to your application, type the following command in the terminal with the `client` folder as your current working directory:
 
 ```shell
 npm install react-table
@@ -73,6 +73,8 @@ npm install react-table
 Now you are ready to change the application code. So, open the `App.js` file inside the `src` folder and replace its content with the following code:
 
 ```react
+// src/App.js
+
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -115,11 +117,13 @@ class App extends Component {
 export default App;
 ```
 
-Here you are importing the stuff you need to set up the flight timetable. In particular, in addition to standard React basic components, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module. This function provides your application with the flights' data and you use it in the constructor of the `App` component, where data are assigned to the component state. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. Finally, you put the `ReactTable` component in the JSX output of the `render()` method by specifying the flights' data and the columns mapping.
+Here, you are importing the stuff you need to set up the flight timetable. In particular, in addition to standard React basic elements, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module. This function provides your application with the flights' data and you use it in the constructor of the `App` component, where data are assigned to the component state. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. Finally, you put the `ReactTable` component in the JSX output of the `render()` method by specifying the flights' data and the columns mapping.
 
-Now let's take a look at the `DataProvider` module:
+Now, within the `src` folder, let's create a file named `DataProvider.js` and populate it with the following code:
 
 ```javascript
+// src/DataProvider.js
+
 export function getInitialFlightData() {
   return [{
     origin: 'London',
@@ -157,13 +161,13 @@ export function getInitialFlightData() {
 
 The module exports the `getInitialFlightData()` function that simply returns an array of flight data. In a real case, the function should request the data from the server, but the current implementation is enough for our purpose. 
 
-The code we arranged until now should let us see the flights' data in a tabular form. To be sure, try to run the following command in the `client` folder:
+Our application so far presents the flight data in tabular form. Let's check it out in the browser! To run the app, type the following command in the terminal with the `client` folder as the current working directory:
 
 ```shell
 npm start
 ```
 
-After a few seconds, you should see in the browser the list of flights as shown in the picture above.
+After a few seconds, you should see in the browser the list of flights as shown in the picture above. If the browser doesn't open automatically, please open it and go to `http://localhost:3000`.
 
 ## Getting the Server Events
 
@@ -172,6 +176,7 @@ Once the client initial appearance is ready, let's add some code to enable it ca
 As a first step, let's add the `eventSource` property to the `App` component and assign an `EventSource` instance, as shown by the following code:
 
 ```react
+// src/App.js
 //...
 class App extends Component {
   constructor(props) {
@@ -187,6 +192,8 @@ The `EventSource()` constructor allows to create an object that initiates a comm
 Now, let's capture the events sent by the server just adding a few lines of code. The new `App` class will look like the following:
 
 ```react
+// src/App.js
+
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -252,6 +259,8 @@ As you can see, in the `componentDidMount()` method an event handler has been ad
 The server-side of our application is a simple *Node.js* web server responding to requests submitted to the *events* URL. To implement it create a `server.js` file and put the following code inside it:
 
 ```javascript
+// server.js
+
 const http = require('http');
 
 http.createServer((request, response) => {
@@ -326,6 +335,8 @@ We could get around the problem by simply adding a `proxy` value in the `package
 So, in order to make the client and server to communicate, we need to enable CORS ([Cross-origin resource sharing](https://auth0.com/docs/cross-origin-authentication)). With this approach, the server authorizes a client published on a different domain to request its resources. To enable CORS in our Node.js server we simply add a new header to be sent to the client: the `Access-Control-Allow-Origin` header. Our initial response now becomes as shown below:
 
 ```javascript
+// server.js
+
     response.writeHead(200, {
       'Connection': 'keep-alive',
       'Content-Type': 'text/event-stream',
@@ -355,6 +366,8 @@ Suppose, for example, that you want to remove the row describing a flight after 
 You could think of using the `data` property of the event to specify a distinguishing event information. However Server-Sent Events protocol allows to specify an event so that you can handle different type of events in an easy way. We are talking about the `event` keyword. Let's take a look at how our server's code changes:
 
 ```javascript
+// server.js
+
 const http = require('http');
 
 http.createServer((request, response) => {
@@ -410,6 +423,8 @@ While composing the response, we added a new `event` string before the `data` st
 So, let's see how the client handles these events:
 
 ```react
+// src/App.js
+
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import { getInitialFlightData } from './DataProvider';
@@ -499,6 +514,8 @@ In other words, to stop the event stream you simply invoked the `close()` method
 Closing the event stream on the client doesn't automatically closes the connection on the server side. This means that the server will continue to send events to the client. You need to intercept on the server side the request of connection closing. You can do it by adding an event handler for the `close` event on the server side, as shown by the following code:
 
 ```javascript
+// server.js
+
 const http = require('http');
 
 http.createServer((request, response) => {
@@ -573,6 +590,8 @@ When the connection closure has to be originated by the server, it will be done 
 This event should be handled by the client as in the following:
 
 ```react
+// src/App.js
+
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import { getInitialFlightData } from './DataProvider';
@@ -640,6 +659,8 @@ When a network issue happens and the connection to an event stream is lost, the 
 Let's implement this strategy in our server. With a bit of refactoring, the following is the final version of the server side code:
 
 ```javascript
+// server.js
+
 const http = require('http');
 
 http.createServer((request, response) => {
@@ -773,6 +794,8 @@ npm install eventsource-polyfill
 Now you should import the module in the `App` component's module:
 
 ```react
+// src/App.js
+
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
