@@ -32,9 +32,9 @@ related:
 
 ## Introducing Server-Sent Events
 
-If someone asks you what is the typical interaction between a browser and a Web server, I'm pretty sure you'll reply something like "*the browser requests a resource and the Web server provides a response*". Of course, this is the classic interaction in a client-server system. But what will you reply if someone asks you to make the server send data to the client at any time without an explicit request? And what if you are requested to implement it by using the HTTP protocol? Maybe you could think that it is impossible: HTTP can only allow the client asking data to the server, not vice versa.
+The typical interaction between a browser and a web server has the browser requesting a resource and the web server providing a response. But how could we describe an event where the server is sending data to the client at any time without an explicit request? If such behavior is to be implemented using the HTTP protocol, it may seem impossible since HTTP only allows the client to request data from the server and not the opposite.
 
-Well, you can do it by using the dear old HTTP. You can use [Server-Sent Events](https://html.spec.whatwg.org/multipage/server-sent-events.html), also known as *SSE* or *Event Source*, a W3C standard that allows the server to push data to a client. Maybe now you are thinking of that annoying polling you implemented to get the progress status from a long server processing. Thanks to SSE you can stop to implement polling to wait for a response from the server. And you don't need any complex and strange protocol. You can continue to use the standard HTTP.
+Well, we can do that using our dear friend HTTP. We can use [Server-Sent Events](https://html.spec.whatwg.org/multipage/server-sent-events.html), also known as *SSE* or *Event Source*, a W3C standard that allows the server to push data to the client. This may suggest using that annoying polling we'd implement to get the progress status from a long server processing, but thanks to SSE, we don't have to implement polling to wait for a response from the server. We don't need any complex and strange protocol, we can continue to use the standard HTTP.
 
 So let's take a look at how to use Server-Sent Events in a realistic application.
 
@@ -44,7 +44,7 @@ In order to show how to use the Server-Sent Events, we are going to implement a 
 
 ![](.\xxx-images\flights-timetable.png)
 
-Here you can find the arrival timetable, whose items will be automatically updated when the state of a flight changes. In our application, the change of flight states is simulated by a scheduled event, but this does not affect the validity of the implementation.
+Here, we can find the arrival timetable, whose items will be automatically updated when the state of a flight changes. In our application, we are going to simulate the flight state changes using scheduled events; however, this does not affect the realism and scope of our implementation.
 
 So, let's start coding and discover how Server-Sent Events work.
 
@@ -486,7 +486,7 @@ Let's consider the case where the client wants to stop the event stream. Create 
   }
 ```
 
-Here we added a <button> element and bound the click event to the `stopUpdates()` method of the same component. This method will look like the following:
+Here we added a `<button>` element and bound the click event to the `stopUpdates()` method of the same component. This method will look like the following:
 
 ```javascript
   stopUpdates() {
