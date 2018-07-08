@@ -280,7 +280,7 @@ As you can see, in the `componentDidMount()` method an event handler has been ad
 
 ## Building the Server
 
-The server-side of our application is a simple *Node.js* web server responding to requests submitted to the *events* URL. To implement it create a `server.js` file and put the following code inside it:
+The server-side of our application is a simple *Node.js* web server responding to requests submitted to the *events* endpoint. To implement it create a `server` folder at the same level of the `client` folder of the React application. Within the `server` folder, create the `server.js` file and put the following code inside it:
 
 ```javascript
 // server.js
@@ -387,7 +387,7 @@ The timetable application developed so far responds to server events always in t
 
 Suppose, for example, that you want to remove the row describing a flight after a certain amount of time it landed. How could the server communicate an event that is not a state change? How can the client capture an event saying that it should remove a row from the table?
 
-You could think of using the `data` property of the event to specify a distinguishing event information. However Server-Sent Events protocol allows to specify an event so that you can handle different type of events in an easy way. We are talking about the `event` keyword. Let's take a look at how our server's code changes:
+You could think of using the `data` property of the event to specify a distinguishing event information. However, the Server-Sent Events protocol allows you to specify an event so that you can handle different type of events in an easy way. We are talking about the `event` keyword. Let's take a look at how our server's code changes:
 
 ```javascript
 // server.js
