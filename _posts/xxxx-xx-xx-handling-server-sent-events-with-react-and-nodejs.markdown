@@ -50,7 +50,7 @@ So, let's start coding and discover how Server-Sent Events work.
 
 ## Starting to Build the React Client
 
-As a first step, let's build our client application. To make things simple, you will use [create-react-app](https://github.com/facebook/create-react-app) to set up the React-based client. So, be sure to get installed [Node.js](https://nodejs.org) on your machine and type the following command in a shell window:
+As a first step, let's build our client application. To make things simple, we will use [create-react-app](https://github.com/facebook/create-react-app) to set up the React-based client. So, let's make sure to get installed [Node.js](https://nodejs.org) on our machine and let's type the following command in a shell window:
 
 ```shell
 npm install -g create-react-app
@@ -62,15 +62,15 @@ This command will install *create-react-app* on your computer. Then let's create
 create-react-app client
 ```
 
-After a few seconds, you will get a `client` folder with all you need inside it. In particular, the `src` subfolder contains the source code of your brand-new application. Our goal is to change the code of this basic React application and replace it with our flight timetable frontend application.
+After a few seconds, we will get a `client` folder with all we need inside it. In particular, the `src` subfolder contains the source code of our brand-new application. Our goal is to change the code of this basic React application and replace it with our flight timetable frontend application.
 
-Since our application will show data in a tabular form, you will install a React component that simplifies the task of rendering data in a table: [React Table](https://react-table.js.org). To add this component to your application, type the following command in the terminal with the `client` folder as your current working directory:
+Since our application will show data in a tabular form, we will install a React component that simplifies the task of rendering data in a table: [React Table](https://react-table.js.org). To add this component to our application, we will type the following command in the terminal with the `client` folder as our current working directory:
 
 ```shell
 npm install react-table
 ```
 
-Now you are ready to change the application code. So, open the `App.js` file inside the `src` folder and replace its content with the following code:
+Now we are ready to change the application code. So, let's open the `App.js` file inside the `src` folder and let's replace its content with the following code:
 
 ```react
 // src/App.js
@@ -117,7 +117,7 @@ class App extends Component {
 export default App;
 ```
 
-Here, you are importing the stuff you need to set up the flight timetable. In particular, in addition to standard React basic elements, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module that we are going to create in just a moment. This function provides your application with flight data that is used to initialize the `App` component state in the constructor. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. This mapping consists of an array of objects like the following:
+Here, we are importing the stuff we need to set up the flight timetable. In particular, in addition to standard React basic elements, we are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module that we are going to create in just a moment. This function provides our application with flight data that is used to initialize the `App` component state in the constructor. In the constructor, we also define the table's structure by mapping the flight properties to the table columns. This mapping consists of an array of objects like the following:
 
 ```react
 this.columns = [{
@@ -187,7 +187,7 @@ Our application so far presents the flight data in tabular form. Let's check it 
 npm start
 ```
 
-After a few seconds, you should see in the browser the list of flights as shown in the picture above. If the browser doesn't open automatically, please open it and go to `http://localhost:3000`.
+After a few seconds, we should see in the browser the list of flights as shown in the picture above. If the browser doesn't open automatically, please open it and go to `http://localhost:3000`.
 
 ## Getting the Server Events
 
@@ -276,11 +276,11 @@ class App extends Component {
 export default App;
 ```
 
-As you can see, in the `componentDidMount()` method an event handler has been added to the `onmessage` property of the `eventSource` object. The `onmessage` property stores an event handler that will be called when an event comes from the server. In our case, the assigned event handler calls the `updateFlightState()` method in order to update the component state with the data sent by the server. Each event carries data in the `e.data` property represented as a string. In our case, the data will be a JSON string that represents updated flight data, as we will see in next section.
+As we can see, in the `componentDidMount()` method an event handler has been added to the `onmessage` property of the `eventSource` object. The `onmessage` property stores an event handler that will be called when an event comes from the server. In our case, the assigned event handler calls the `updateFlightState()` method in order to update the component state with the data sent by the server. Each event carries data in the `e.data` property represented as a string. In our case, the data will be a JSON string that represents updated flight data, as we will see in next section.
 
 ## Building the Server
 
-The server-side of our application is a simple *Node.js* web server responding to requests submitted to the *events* endpoint. To implement it create a `server` folder at the same level of the `client` folder of the React application. Within the `server` folder, create the `server.js` file and put the following code inside it:
+The server-side of our application is a simple *Node.js* web server responding to requests submitted to the *events* endpoint. To implement it, let's create a `server` folder at the same level of the `client` folder of the React application. Within the `server` folder, let's create the `server.js` file and put the following code inside it:
 
 ```javascript
 // server.js
@@ -319,7 +319,7 @@ http.createServer((request, response) => {
 console.log('Server running at http://127.0.0.1:5000/');
 ```
 
-At the beginning of the file, you import the `http` module and use its `createServer()` method to run a web server whose behaviour is described by the callback function passed as an argument. The callback function verifies that the requested URL is `/events` and only in this case initiates a response by sending a few HTTP headers. The headers sent by the server are very important in order to establish a live channel with the client.
+At the beginning of the file, we import the `http` module and we use its `createServer()` method to run a web server whose behaviour is described by the callback function passed as an argument. The callback function verifies that the requested URL is `/events` and only in this case initiates a response by sending a few HTTP headers. The headers sent by the server are very important in order to establish a live channel with the client.
 
 In fact, the `keep-alive` value for the `Connection` header says the client to handle a permanent connection, that is a connection that doesn't end with the first bunch of data received.
 
@@ -333,7 +333,7 @@ After sending these headers, the client using the `EventSource()` constructor wi
 data: xxxxxxx
 ```
 
-The `xxxxxxx` represents the data to be sent to the client. In our case, we send a JSON string representing a flight. You can send multiple data lines in an event response, but the response must be closed by a double empty line. In other words, your event message could be like in the following schema:
+The `xxxxxxx` represents the data to be sent to the client. In our case, we send a JSON string representing a flight. We can send multiple data lines in an event response, but the response must be closed by a double empty line. In other words, our event message could be like in the following schema:
 
 ```
 data: This is a message\n
@@ -342,7 +342,7 @@ data: A long message\n
 \n
 ```
 
-In order to execute the web server you created so far, type the following command in a shell window:
+In order to execute the web server we created so far, let's type the following command in a shell window:
 
 ```shell
 node server.js
@@ -369,15 +369,15 @@ So, in order to make the client and server to communicate, we need to enable COR
     });
 ```
 
-The asterisk assigned to the `Access-Control-Allow-Origin` header indicates that any client is authorized to access this URL. It may not be the desired solution in a production environment. In fact, in the production environment, you should adopt a different approach, such as put the two applications under the same domain, by using a reverse proxy, or by enabling [CORS](https://auth0.com/docs/cross-origin-authentication) selectively, that is authorizing only specific domains.
+The asterisk assigned to the `Access-Control-Allow-Origin` header indicates that any client is authorized to access this URL. It may not be the desired solution in a production environment. In fact, in the production environment, we should adopt a different approach, such as put the two applications under the same domain, by using a reverse proxy, or by enabling [CORS](https://auth0.com/docs/cross-origin-authentication) selectively, that is authorizing only specific domains.
 
-Once you have enabled CORS on the Node.js server, you should change the URL passed to the `EventSource()` constructor. Now the `EventSource` object initialization in the React client should look like the following:
+Once you have enabled CORS on the Node.js server, we should change the URL passed to the `EventSource()` constructor. Now the `EventSource` object initialization in the React client should look like the following:
 
 ```javascript
 this.eventSource = new EventSource('http://localhost:5000/events');
 ```
 
-Now all is ready! Run the server then launch the client application. After a few seconds you should see your browser showing something like the following:
+Now all is ready! Run the server then launch the client application. After a few seconds we should see your browser showing something like the following:
 
 ![](.\xxx-images\animated-flights-timetable.gif)
 
@@ -385,9 +385,9 @@ Now all is ready! Run the server then launch the client application. After a few
 
 The timetable application developed so far responds to server events always in the same way: by updating the specific flight sent in the event's `data` property. How could we manage a different situation?
 
-Suppose, for example, that you want to remove the row describing a flight after a certain amount of time it landed. How could the server communicate an event that is not a state change? How can the client capture an event saying that it should remove a row from the table?
+Suppose, for example, that we want to remove the row describing a flight after a certain amount of time it landed. How could the server communicate an event that is not a state change? How can the client capture an event saying that it should remove a row from the table?
 
-You could think of using the `data` property of the event to specify a distinguishing event information. However, the Server-Sent Events protocol allows you to specify an event so that you can handle different type of events in an easy way. We are talking about the `event` keyword. Let's take a look at how our server's code changes:
+We could think of using the `data` property of the event to specify a distinguishing event information. However, the Server-Sent Events protocol allows us to specify an event so that we can handle different type of events in an easy way. We are talking about the `event` keyword. Let's take a look at how our server's code changes:
 
 ```javascript
 // server.js
@@ -442,7 +442,7 @@ http.createServer((request, response) => {
 console.log('Server running at http://127.0.0.1:5000/');
 ```
 
-While composing the response, we added a new `event` string before the `data` string. The `event` keyword helps you to specify the type of event you are sending to the client. In the example shown above, we indicated the `filghtStateUpdate` value for the previously existing events and added a new event with the `flightRemoval` value for `event` keyword. As you can easily imagine, you are saying to your client that some events concern the update of the flight's state and some others the removal of the flight. You will expect that the client will perform different actions for different types of events.
+While composing the response, we added a new `event` string before the `data` string. The `event` keyword helps us to specify the type of event you are sending to the client. In the example shown above, we indicated the `filghtStateUpdate` value for the previously existing events and added a new event with the `flightRemoval` value for `event` keyword. As we can easily imagine, we are saying to our client that some events concern the update of the flight's state and some others the removal of the flight. We will expect that the client will perform different actions for different types of events.
 
 So, let's see how the client handles these events:
 
@@ -501,15 +501,15 @@ export default App;
 
 ```
 
-As you can see, the body of the `componentDidMont()` method has no longer the assignment of the event handler to the `onmessage` property. Now we are using the `addEventListener()` method in order to assign an event handler to a specific event. In this way, you are able to easily assign a specific event handler to each event generated by the server like it was generated by any standard HTML element.
+As we can see, the body of the `componentDidMont()` method has no longer the assignment of the event handler to the `onmessage` property. Now we are using the `addEventListener()` method in order to assign an event handler to a specific event. In this way, we are able to easily assign a specific event handler to each event generated by the server like it was generated by any standard HTML element.
 
 In the example we assigned the `updateFlightState()` method to the `flightStateUpdate` event, and the `removeFlight()` method to the `flightRemoval` event.
 
 ## Handling Connection Closure
 
-The Server-Sent Event connection between the client and the server is a streaming connection. This means that the connection will be kept active indefinitely unless the client or the server stops running. If your server has no more events to send or the client isn't longer interested in server's events, how can you explicitly stop the currently active connection?
+The Server-Sent Event connection between the client and the server is a streaming connection. This means that the connection will be kept active indefinitely unless the client or the server stops running. If our server has no more events to send or the client isn't longer interested in server's events, how can we explicitly stop the currently active connection?
 
-Let's consider the case where the client wants to stop the event stream. Create a button that allows the user to stop receiving new events. So, change the `render()` method of the `App` class, as shown below:
+Let's consider the case where the client wants to stop the event stream. Let's create a button that allows the user to stop receiving new events. So, let's change the `render()` method of the `App` class, as shown below:
 
 ```react
   render() {
@@ -533,9 +533,9 @@ Here we added a `<button>` element and bound the click event to the `stopUpdates
   }
 ```
 
-In other words, to stop the event stream you simply invoked the `close()` method of the `eventSource` object.
+In other words, to stop the event stream we simply invoked the `close()` method of the `eventSource` object.
 
-Closing the event stream on the client doesn't automatically closes the connection on the server side. This means that the server will continue to send events to the client. You need to intercept on the server side the request of connection closing. You can do it by adding an event handler for the `close` event on the server side, as shown by the following code:
+Closing the event stream on the client doesn't automatically closes the connection on the server side. This means that the server will continue to send events to the client. We need to intercept on the server side the request of connection closing. We can do it by adding an event handler for the `close` event on the server side, as shown by the following code:
 
 ```javascript
 // server.js
@@ -577,7 +577,7 @@ function closeConnection(response) {
 }
 ```
 
-The `request.on()` method catches the `close` request and executes the `closeConnection()` function. The `closeConnection()` method invoke the `response.end()` method to close the HTTP connection. It also checks if the connection is already closed: this situation may occur when multiple closing requests are sent by the client.
+The `request.on()` method catches the `close` request and executes the `closeConnection()` function. The `closeConnection()` method invokes the `response.end()` method to close the HTTP connection. It also checks if the connection is already closed: this situation may occur when multiple closing requests are sent by the client.
 
 Since our server event generators are scheduled by using `setTimeout()`, it could happen that an attempt to send an event to the client may be made after the connection has been closed, raising an exception. We can avoid this by checking if the connection is still active, as shown in the following example:
 
@@ -655,17 +655,17 @@ class App extends Component {
 export default App;
 ```
 
-It assigns the `stopUpdates()` method to the `closedConnection` event and starts the connection closure process you already saw above.
+It assigns the `stopUpdates()` method to the `closedConnection` event and starts the connection closure process we already saw above.
 
 ## Handling Connection Recovery
 
-So far you built a complete event system management: you are able to get different types of events pushed by the server and to control the end of the event stream. But what happens if the client loses some event due to network issues? Of course, it depends on the specific application. In some situations, you may ignore the loss of some event, in some others you can't. 
+So far we built a complete event system management: we are able to get different types of events pushed by the server and to control the end of the event stream. But what happens if the client loses some event due to network issues? Of course, it depends on the specific application. In some situations, we may ignore the loss of some event, in some others we can't. 
 
-Consider, for example, the event stream we implemented so far. If a network issue happens and the client loses the `flightStateUpdate` event that puts the flight into the landing state, it could not be a big problem. Simply the user will not be able to see the landing phase on the timetable, but when the connection will be restored the timetable will provide correct information with the subsequent states.  However, if the network issue happens immediately after the flight enters in the landing state and the connection is restored after the `flightRemoval` event, you have an issue: the flight will remain in the landing state forever and you need to handle this bad situation.
+Let's consider, for example, the event stream we implemented so far. If a network issue happens and the client loses the `flightStateUpdate` event that puts the flight into the landing state, it could not be a big problem. Simply the user will not be able to see the landing phase on the timetable, but when the connection will be restored the timetable will provide correct information with the subsequent states.  However, if the network issue happens immediately after the flight enters in the landing state and the connection is restored after the `flightRemoval` event, we have an issue: the flight will remain in the landing state forever and we need to handle this bad situation.
 
 The Server-Sent Events protocol help us by providing a mechanism to identify events and to restore a dropped connection. Let's try to explain.
 
-When the server generates an event, you have the ability to assign an identifier by attaching an `id` keyword to the response to be sent to the client. For example, you could send the `flightStateUpdate` event as shown by the following code:
+When the server generates an event, we have the ability to assign an identifier by attaching an `id` keyword to the response to be sent to the client. For example, we could send the `flightStateUpdate` event as shown by the following code:
 
 ```javascript
 setTimeout(() => {
@@ -774,7 +774,7 @@ We introduced the `eventHistory` array, where the events sent to the client are 
 
 Then we assigned to the `checkConnectionToRestore()` function the task of checking and restoring possible broken connections and encapsulated the code for event generation in the `sendEvents()` function.
 
-You can see that now each time an event is sent to the client, it is also stored in the `eventHistory` array, as you can check in the following code:
+We can see that now each time an event is sent to the client, it is also stored in the `eventHistory` array, as we can check in the following code:
 
 ```javascript
 setTimeout(() => {
@@ -786,7 +786,7 @@ setTimeout(() => {
 }, 3000);
 ```
 
-If the `checkConnectionToRestore()` function find the `Last-Event-Id` HTTP header in the request, it filters the already sent events in the `eventHistory` array and sends them again to the client, as you can see in the code below:
+If the `checkConnectionToRestore()` function find the `Last-Event-Id` HTTP header in the request, it filters the already sent events in the `eventHistory` array and sends them again to the client, as we can see in the code below:
 
 ```javascript
 function checkConnectionToRestore(request, response, eventHistory) {
@@ -807,15 +807,15 @@ This completes and makes more robust our system.
 
 ## Browser Support
 
-According to [caniuse.com](https://caniuse.com/#search=server%20sent%20events), Server-Sent Events are currently supported by all major browsers but Internet Explorer, Edge and Opera Mini. Although [supporting them in Edge is under consideration](https://developer.microsoft.com/en-us/microsoft-edge/platform/status/serversenteventseventsource/), the lack of universal support forces you to use polyfills, such as [Remy Sharp's EventSource.js](https://github.com/remy/polyfills/blob/master/EventSource.js) or [Yaffle's EventSource](https://github.com/Yaffle/EventSource) or [AmvTek's EventSource](https://github.com/amvtek/EventSource).
+According to [caniuse.com](https://caniuse.com/#search=server%20sent%20events), Server-Sent Events are currently supported by all major browsers but Internet Explorer, Edge and Opera Mini. Although [supporting them in Edge is under consideration](https://developer.microsoft.com/en-us/microsoft-edge/platform/status/serversenteventseventsource/), the lack of universal support forces us to use polyfills, such as [Remy Sharp's EventSource.js](https://github.com/remy/polyfills/blob/master/EventSource.js) or [Yaffle's EventSource](https://github.com/Yaffle/EventSource) or [AmvTek's EventSource](https://github.com/amvtek/EventSource).
 
-Using these polyfills is very simple. Here is an example of using AmvTek's polyfill, but using the other ones is not so different. In order to add AmvTek's EventSource polyfill to our React client application, you need to install it via `npm`, as shown below: 
+Using these polyfills is very simple. Here is an example of using AmvTek's polyfill, but using the other ones is not so different. In order to add AmvTek's EventSource polyfill to our React client application, we need to install it via `npm`, as shown below: 
 
 ```shell
 npm install eventsource-polyfill
 ```
 
-Now you should import the module in the `App` component's module:
+Now we should import the module in the `App` component's module:
 
 ```react
 // src/App.js
@@ -831,11 +831,11 @@ class App extends Component {
 }
 ```
 
-That's all. The polyfill will define an `EventSource` constructor only if it is not natively supported and your code will continue to work as before also on browsers that don't support it.
+That's all. The polyfill will define an `EventSource` constructor only if it is not natively supported and our code will continue to work as before also on browsers that don't support it.
 
 ## Server-Sent Events vs WebSockets
 
-Using Server Side Events helps to resolve some common issues that involve waiting for data from the server. Instead of implementing a long polling whose main drawback is consuming resources both on the client and on the server side, you get a simple and performant solution.
+Using Server Side Events helps us to resolve some common issues that involve waiting for data from the server. Instead of implementing a long polling whose main drawback is consuming resources both on the client and on the server side, we get a simple and performant solution.
 
 An alternative approach is based on [WebSockets](https://www.w3.org/TR/websockets/), a standard TCP based protocol providing full duplex communication between the client and the server. What benefits does WebSockets bring with respect to Server-Sent Events? When to use one technology instead of the other?
 
@@ -843,7 +843,7 @@ The following are some considerations to keep in mind when choosing between Serv
 
 - WebSockets supports a bidirectional communication, while Server-Sent Events supports only communication from the server to the client
 - WebSockets is a low-level protocol, while Server-Sent Events is based on HTTP and so it doesn't require additional settings in the network infrastructure
-- WebSockets supports binary data transfer, while Server-Sent Events supports only text-based data transfer; if you want to transfer binary data via Server-Sent Events you need to encode it in Base64
+- WebSockets supports binary data transfer, while Server-Sent Events supports only text-based data transfer; if we want to transfer binary data via Server-Sent Events we need to encode it in Base64
 - The combination of low-level protocol and support of binary data transfer makes WebSockets more suitable than Server-Sent Events for applications requiring real-time binary data transfer as may happen in gaming or other similar application types
 
 ## Summary
