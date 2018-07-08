@@ -117,7 +117,27 @@ class App extends Component {
 export default App;
 ```
 
-Here, you are importing the stuff you need to set up the flight timetable. In particular, in addition to standard React basic elements, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module. This function provides your application with the flights' data and you use it in the constructor of the `App` component, where data are assigned to the component state. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. Finally, you put the `ReactTable` component in the JSX output of the `render()` method by specifying the flights' data and the columns mapping.
+Here, you are importing the stuff you need to set up the flight timetable. In particular, in addition to standard React basic elements, you are importing the `ReactTable` component with its basic stylesheets and the `getInitialFlightData()` function defined in the `DataProvider` module that we are going to create in just a moment. This function provides your application with flight data that is used to initialize the `App` component state in the constructor. In the constructor, you also define the table's structure by mapping the flight properties to the table columns. This mapping consists of an array of objects like the following:
+
+```react
+this.columns = [{
+    Header: 'Origin',
+    accessor: 'origin'
+  }, {
+    Header: 'Flight',
+    accessor: 'flight'
+  }, {
+    Header: 'Arrival',
+    accessor: 'arrival'
+  }, {
+    Header: 'State',
+    accessor: 'state'
+  }];
+}
+```
+Each object has a `Header` property, representing the column's header, and an `accessor` property, representing the flight property whose value should be shown in that column. _React Table_ has many other options to define the table's structure, but `Header` and `accessor` are sufficient for our goal. 
+
+Finally, within the `render` method of `App` component, we include the `ReactTable` element and pass it the flight data and the columns as props.
 
 Now, within the `src` folder, let's create a file named `DataProvider.js` and populate it with the following code:
 
@@ -256,7 +276,7 @@ class App extends Component {
 export default App;
 ```
 
-As you can see, in the `componentDidMount()` method an event handler has been added to the `onmessage` property of the `eventSource` object. The event handler calls the `updateFlightState()` method in order to update the component state with the data sent by the server. The handler is executed whenever the server sends a new event.  Each eventcarries data in the `e.data` property represented as a string. In our case, the data will be a JSON string that represents updated flight data, as we will see in next section.
+As you can see, in the `componentDidMount()` method an event handler has been added to the `onmessage` property of the `eventSource` object. The `onmessage` property stores an event handler that will be called when an event comes from the server. In our case, the assigned event handler calls the `updateFlightState()` method in order to update the component state with the data sent by the server. Each event carries data in the `e.data` property represented as a string. In our case, the data will be a JSON string that represents updated flight data, as we will see in next section.
 
 ## Building the Server
 
